@@ -2,21 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./image-load.module.css";
 import potrace from "potrace";
 
-const ImageLoad = ({ source, alt }) => {
-	const [svg, setSVG] = useState(null);
+const ImageLoad = ({ source, svg, alt }) => {
+	// const [svg, setSVG] = useState(null);
 	const [isLoaded, setLoaded] = useState(false);
 	const imgRef = useRef();
 
-	const params = {
-		background: "#fff",
-		color: "#ccc",
-		threshold: 120,
-	};
-	useEffect(() => {
-		potrace.trace(source, params, function (err, svg) {
-			setSVG(svg);
-		});
-	}, []);
+	// const params = {
+	// 	background: "#fff",
+	// 	color: "#ccc",
+	// 	threshold: 120,
+	// };
+	// useEffect(() => {
+	// 	potrace.trace(source, params, function (err, svg) {
+	// 		setSVG(svg);
+	// 	});
+	// }, []);
 
 	const handleImageLoaded = () => {
 		setLoaded(true);
@@ -24,12 +24,13 @@ const ImageLoad = ({ source, alt }) => {
 
 	return (
 		<div className={styles.container}>
+			<h1>Traced SVG</h1>
 			<div className={styles.hidden}></div>
 			<img
 				className={styles.image}
 				ref={imgRef}
 				onLoad={handleImageLoaded}
-				src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`}
+				src={svg}
 				alt=""
 			/>
 			<img

@@ -1,15 +1,75 @@
-const potrace = require('potrace');
 const fs = require('fs');
+const path = require('path');
+const { promisify } = require(`bluebird`);
 
-const params = {
-    background: "#fff",
-    color: "#ccc",
-    threshold: 120,
-};
+const optimize = (svg) => {
+    const SVGO = require(`svgo`);
+    const svgo = new SVGO({
+        multipass: true,
+        floatPrecision: 0,
+        plugins: [
+            {
+                removeViewBox: false,
+            },
+            {
+                addAttributesToSVGElement: {
+                    attributes: [
+                        {
+                            preserveAspectRatio: `none`,
+                        },
+                    ],
+                },
+            },
+        ],
+    })
+    return svgo.optimize(svg).then(({ data }) => data);
+}
 
-potrace.trace('./resort.jpg', params, function (err, svg) {
-    if (err) {
-        console.log(err);
+const trace = async (filePath) => {
+
+    const svgToMiniDataURI = require(`mini-svg-data-uri`);
+    const potrace = require('potrace');
+    const trace = promisify(potrace.trace);
+
+    const params = {
+        color: `lightgray`,
+        optTolerance: 0.4,
+        turdSize: 100,
+        turnPolicy: potrace.Potrace.TURNPOLICY_MAJORITY,
     }
-    fs.writeFileSync('output.svg', svg);
-});
+
+    // `srcset` attribute rejects URIs with literal spaces
+    const encodeSpaces = str => str.replace(/ /gi, `%20`);
+
+    return trace(filePath, params)
+    .then(optimize)
+    .then(svgToMiniDataURI)
+    .then(encodeSpaces);
+}
+
+const writeToFile = (des, data) => {
+    fs.writeFile(des, JSON.stringify(data, null, 2), err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Write file successfully.');
+        }
+    }) 
+}
+
+const getTracedSVG = (filePath) => {
+    trace(filePath)
+    .then(data => {
+        //write to file for test
+        writeToFile(path.resolve(__dirname, './svg/trace.json'), data);
+    })
+    .catch((err) => {
+        console.log('trace error', err);
+    })
+}
+
+getTracedSVG(path.resolve(__dirname, './image/blog'));
+
+
+
+

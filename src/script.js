@@ -60,16 +60,16 @@ const writeToFile = (des, data) => {
 const getTracedSVG = (filePath) => {
     trace(filePath)
     .then(data => {
-        /*testing
-        writeToFile(path.resolve(__dirname, './svg/trace.json'), data);*/
+        // testing
+        writeToFile(path.resolve(__dirname, './trace.json'), data);
         return data;
     })
     .catch((err) => {
         console.log('trace error', err);
     })
 }
-/*multipltesting
-getTracedSVG(path.resolve(__dirname, './image/blog'));*/
+// testing
+getTracedSVG(path.resolve(__dirname, './blog'));
 
 exports.getTracedSVG = getTracedSVG;
 

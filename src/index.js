@@ -61,7 +61,7 @@ const getTracedSVG = (filePath) => {
     trace(filePath)
     .then(data => {
         // testing
-        writeToFile(path.resolve(__dirname, './trace.json'), data);
+        // writeToFile(path.resolve(__dirname, './trace.json'), data);
         return data;
     })
     .catch((err) => {
@@ -69,7 +69,7 @@ const getTracedSVG = (filePath) => {
     })
 }
 // testing
-getTracedSVG(path.resolve(__dirname, './blog'));
+// getTracedSVG(path.resolve(__dirname, './blog'));
 
 exports.getTracedSVG = getTracedSVG;
 

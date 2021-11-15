@@ -47,30 +47,15 @@ const trace = async (filePath) => {
     .then(encodeSpaces);
 }
 
-const writeToFile = (des, data) => {
-    fs.writeFile(des, JSON.stringify(data, null, 2), err => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Write file successfully.');
-        }
-    }) 
-}
-
-const getTracedSVG = (filePath) => {
-    trace(filePath)
-    .then(data => {
-        // testing
-        // writeToFile(path.resolve(__dirname, './trace.json'), data);
-        return data;
-    })
-    .catch((err) => {
-        console.log('trace error', err);
+module.exports = (filePath) => {
+    return new Promise((resolve, reject) => {
+        trace(filePath)
+            .then(data => {
+                resolve(data);
+            })
+            .catch((err) => {
+                reject(err);
+            })
     })
 }
-// testing
-// getTracedSVG(path.resolve(__dirname, './blog'));
-
-exports.getTracedSVG = getTracedSVG;
-
 

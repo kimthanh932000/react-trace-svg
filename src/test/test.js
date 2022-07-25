@@ -1,7 +1,7 @@
 const getTracedSVG = require('../index');
 const fs = require('fs');
 const path = require('path');
-const des = path.resolve(__dirname, `./mv-img.png`);
+const des = path.resolve(__dirname, `./resort.jpeg`);
 
 const writeToFile = (des, data) => {
     fs.writeFile(des, JSON.stringify(data, null, 2), err => {

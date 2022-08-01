@@ -1,17 +1,14 @@
-const fs = require('fs');
-const path = require('path');
 const { promisify } = require(`bluebird`);
 
-const optimize = (svg) => {
-    const SVGO = require(`svgo`);
-    const svgo = new SVGO({
+const optimizeSVG = (svg) => {
+    const {optimize} = require('svgo');
+    const result = optimize(svg, {
         multipass: true,
         floatPrecision: 0,
         plugins: [
             {
+                name: 'preset-default',
                 removeViewBox: false,
-            },
-            {
                 addAttributesToSVGElement: {
                     attributes: [
                         {
@@ -22,7 +19,7 @@ const optimize = (svg) => {
             },
         ],
     })
-    return svgo.optimize(svg).then(({ data }) => data);
+    return result.data;
 }
 
 const trace = async (filePath) => {
@@ -42,7 +39,7 @@ const trace = async (filePath) => {
     const encodeSpaces = str => str.replace(/ /gi, `%20`);
 
     return trace(filePath, params)
-    .then(optimize)
+    .then(optimizeSVG)
     .then(svgToMiniDataURI)
     .then(encodeSpaces);
 }

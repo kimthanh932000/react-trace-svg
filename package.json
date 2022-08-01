@@ -1,6 +1,6 @@
 {
   "name": "react-trace-svg",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A library for tracing svg",
   "main": "src/index.js",
   "homepage": "https://github.com/kimthanh932000/react-trace-svg",
